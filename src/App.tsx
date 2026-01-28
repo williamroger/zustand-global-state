@@ -1,13 +1,11 @@
-import { Button } from "./components/ui/button";
-import { useStore } from "./store";
+import { Counter } from "./components/app/Counter";
+import { UserProfile } from "./components/app/UserProfile";
 
 export function App() {
-  const { counter, increment } = useStore();
-
   return (
-    <div>
-      <p>Counter: {counter}</p>
-      <Button onClick={increment}>Increment</Button>
+    <div className="h-screen flex flex-col items-center justify-center">
+      <Counter />
+      <UserProfile />
     </div>
   );
 }
