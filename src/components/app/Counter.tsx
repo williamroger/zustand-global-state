@@ -1,9 +1,14 @@
 import { Button } from "../ui/button";
 import { useStore } from "../../store";
+import { useShallow } from "zustand/shallow";
 
 export function Counter() {
-  const counter = useStore((state) => state.counter);
-  const increment = useStore((state) => state.increment);
+  const { counter, increment } = useStore(
+    useShallow((state) => ({
+      counter: state.counter,
+      increment: state.increment,
+    })),
+  );
 
   console.log("Counter render");
   return (

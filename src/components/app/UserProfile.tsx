@@ -2,15 +2,21 @@ import { useStore } from "@/store";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
+import { useShallow } from "zustand/shallow";
 
 export function UserProfile() {
-  const user = useStore((state) => state.user);
+  const { user, updateUsername } = useStore(
+    useShallow((state) => ({
+      user: state.user,
+      updateUsername: state.updateUsername,
+    })),
+  );
+
   const form = useForm({
     defaultValues: {
       username: user.username,
     },
   });
-  const updateUsername = useStore((state) => state.updateUsername);
 
   console.log("UserProfile render");
 
