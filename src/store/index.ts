@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist, devtools } from "zustand/middleware";
 
 type Store = {
   counter: number;
@@ -14,20 +14,36 @@ type Actions = {
 };
 
 export const useStore = create<Store & Actions>()(
-  persist(
-    (set) => ({
-      counter: 0,
-      user: {
-        username: "",
+  devtools(
+    persist(
+      (set) => ({
+        counter: 0,
+        user: {
+          username: "",
+        },
+        updateUsername: (username: string) =>
+          set(
+            () => ({
+              user: { username },
+            }),
+            false,
+            "updateUsername",
+          ),
+        increment: () =>
+          set(
+            (prevState) => ({ counter: prevState.counter + 1 }),
+            false,
+            "increment",
+          ),
+      }),
+      {
+        name: "@zustand-storage", // unique name for the storage
       },
-      updateUsername: (username: string) =>
-        set(() => ({
-          user: { username },
-        })),
-      increment: () => set((prevState) => ({ counter: prevState.counter + 1 })),
-    }),
+    ),
     {
-      name: "@zustand-storage", // unique name for the storage
+      name: "ZustandStore",
+      enabled: import.meta.env.DEV,
+      anonymousActionType: "ZustandAction",
     },
   ),
 );
