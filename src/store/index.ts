@@ -1,10 +1,18 @@
 import { create } from "zustand";
-import { persist, devtools } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
 type Store = {
   counter: number;
   user: {
+    name: string;
+    email: string;
     username: string;
+    address: {
+      street: string;
+      city: string;
+      country: string;
+    };
   };
 };
 
@@ -15,31 +23,27 @@ type Actions = {
 
 export const useStore = create<Store & Actions>()(
   devtools(
-    persist(
-      (set) => ({
-        counter: 0,
-        user: {
-          username: "",
+    immer((set) => ({
+      counter: 0,
+      user: {
+        username: "@william",
+        name: "William Roger",
+        email: "william@email.com",
+        address: {
+          street: "123 Main St",
+          city: "Metropolis",
+          country: "Freedonia",
         },
-        updateUsername: (username: string) =>
-          set(
-            () => ({
-              user: { username },
-            }),
-            false,
-            "updateUsername",
-          ),
-        increment: () =>
-          set(
-            (prevState) => ({ counter: prevState.counter + 1 }),
-            false,
-            "increment",
-          ),
-      }),
-      {
-        name: "@zustand-storage", // unique name for the storage
       },
-    ),
+      updateUsername: (username: string) =>
+        set((prevState) => {
+          prevState.user.username = username;
+        }),
+      increment: () =>
+        set((prevState) => {
+          prevState.counter += 1;
+        }),
+    })),
     {
       name: "ZustandStore",
       enabled: import.meta.env.DEV,
