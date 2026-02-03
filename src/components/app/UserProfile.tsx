@@ -7,8 +7,8 @@ import { useShallow } from "zustand/shallow";
 export function UserProfile() {
   const { user, updateUsername } = useStore(
     useShallow((state) => ({
-      user: state.user,
-      updateUsername: state.updateUsername,
+      user: state.user.data,
+      updateUsername: state.user.updateUsername,
     })),
   );
 
